@@ -16,10 +16,10 @@ public class RestCointCounter {
         bilon.put(1, 10000);
 
         counter(3.53, bilon);
-        counter(3.53, bilon);
-
-
-
+        counter(12.54, bilon);
+        counter(7.65, bilon);
+        counter(2.15, bilon);
+        counter(1.25, bilon);
     }
 
     public static void counter(double rest, Map<Integer, Integer> bilon) {
@@ -73,7 +73,8 @@ public class RestCointCounter {
         });
     }
 
-    public static Map<Integer, Integer> countRest(int index, int[] arr, int rest, Map<Integer, Integer> ans, Map<Integer, Integer> bilon) {
+    public static Map<Integer, Integer> countRest(int index, int[] arr, int rest,
+                                                  Map<Integer, Integer> ans, Map<Integer, Integer> bilon) {
 
         if (rest == 0) return ans;
         if (index >= arr.length) return new HashMap<>();
