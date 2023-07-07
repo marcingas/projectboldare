@@ -17,7 +17,9 @@ public class RestCointCounter {
         bilon.put(1, 10000);
 
         counter(150, bilon);
-        counter(2, bilon);
+        counter(3, bilon);
+        counter(3, bilon);
+        counter(3, bilon);
 
     }
 
@@ -36,7 +38,7 @@ public class RestCointCounter {
         ans.put(2, 0);
         ans.put(1, 0);
 
-        if (countRest(0, arr, rest1, ans, bilon)) {
+        countRest(0, arr, rest1, ans, bilon);
             System.out.println("Dla reszty: " + rest);
             ans.forEach((key, value) -> {
                 switch (key) {
@@ -69,14 +71,16 @@ public class RestCointCounter {
                     }
                 }
             });
-        } else System.out.println("Nie ma wystarczającej liczby monet");
     }
 
     public static boolean countRest(int index, int[] arr, int rest,
                                     Map<Integer, Integer> ans, Map<Integer, Integer> bilon) {
 
         if (rest == 0) return true;
-        if (index >= arr.length) return false;
+        if (index >= arr.length) {
+            System.out.println("-----Dla reszty poniżej za mało monet!----");
+            return false;
+        }
 
         if (index == 8 && arr[index] * 100 <= rest && bilon.get(arr[index]) > 100) {
             ans.put(arr[index], ans.get(arr[index]) + 100);
@@ -88,7 +92,6 @@ public class RestCointCounter {
             countRest(index, arr, rest - arr[index], ans, bilon);
         } else {
             countRest(index + 1, arr, rest, ans, bilon);
-
         }
         return true;
     }
