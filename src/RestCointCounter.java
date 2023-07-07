@@ -1,5 +1,6 @@
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class RestCointCounter {
 
@@ -15,11 +16,9 @@ public class RestCointCounter {
         bilon.put(2, 100);
         bilon.put(1, 10000);
 
-        counter(3.53, bilon);
-        counter(12.54, bilon);
-        counter(7.65, bilon);
-        counter(2.15, bilon);
-        counter(1.25, bilon);
+        counter(150, bilon);
+        counter(2, bilon);
+
     }
 
     public static void counter(double rest, Map<Integer, Integer> bilon) {
@@ -37,55 +36,60 @@ public class RestCointCounter {
         ans.put(2, 0);
         ans.put(1, 0);
 
-        countRest(0, arr, rest1, ans, bilon);
-
-        System.out.println("Dla reszty: " + rest);
-        ans.forEach((key, value) -> {
-            switch (key) {
-                case 1 -> {
-                    if (value > 0) System.out.println("Wydaj " + value + " x 1 groszy");
+        if (countRest(0, arr, rest1, ans, bilon)) {
+            System.out.println("Dla reszty: " + rest);
+            ans.forEach((key, value) -> {
+                switch (key) {
+                    case 1 -> {
+                        if (value > 0) System.out.println("Wydaj " + value + " x 1 groszy");
+                    }
+                    case 2 -> {
+                        if (value > 0) System.out.println("Wydaj " + value + " x 2 grosze");
+                    }
+                    case 5 -> {
+                        if (value > 0) System.out.println("Wydaj " + value + " x 5 groszy");
+                    }
+                    case 10 -> {
+                        if (value > 0) System.out.println("Wydaj " + value + " x 10 groszy");
+                    }
+                    case 20 -> {
+                        if (value > 0) System.out.println("Wydaj " + value + " x 20 groszy");
+                    }
+                    case 50 -> {
+                        if (value > 0) System.out.println("Wydaj " + value + " x 50 groszy");
+                    }
+                    case 100 -> {
+                        if (value > 0) System.out.println("Wydaj " + value + " x 1 Złoty");
+                    }
+                    case 200 -> {
+                        if (value > 0) System.out.println("Wydaj " + value + " x 2 Złote");
+                    }
+                    default -> {
+                        if (value > 0) System.out.println("Wydaj " + value + " x 5 Zotych");
+                    }
                 }
-                case 2 -> {
-                    if (value > 0) System.out.println("Wydaj " + value + " x 2 grosze");
-                }
-                case 5 -> {
-                    if (value > 0) System.out.println("Wydaj " + value + " x 5 groszy");
-                }
-                case 10 -> {
-                    if (value > 0) System.out.println("Wydaj " + value + " x 10 groszy");
-                }
-                case 20 -> {
-                    if (value > 0) System.out.println("Wydaj " + value + " x 20 groszy");
-                }
-                case 50 -> {
-                    if (value > 0) System.out.println("Wydaj " + value + " x 50 groszy");
-                }
-                case 100 -> {
-                    if (value > 0) System.out.println("Wydaj " + value + " x 1 Złoty");
-                }
-                case 200 -> {
-                    if (value > 0) System.out.println("Wydaj " + value + " x 2 Złote");
-                }
-                default -> {
-                    if (value > 0) System.out.println("Wydaj " + value + " x 5 Zotych");
-                }
-            }
-        });
+            });
+        } else System.out.println("Nie ma wystarczającej liczby monet");
     }
 
-    public static Map<Integer, Integer> countRest(int index, int[] arr, int rest,
-                                                  Map<Integer, Integer> ans, Map<Integer, Integer> bilon) {
+    public static boolean countRest(int index, int[] arr, int rest,
+                                    Map<Integer, Integer> ans, Map<Integer, Integer> bilon) {
 
-        if (rest == 0) return ans;
-        if (index >= arr.length) return new HashMap<>();
+        if (rest == 0) return true;
+        if (index >= arr.length) return false;
 
-        if ((arr[index] <= rest) && (bilon.get(arr[index]) > 0)) {
+        if (index == 8 && arr[index] * 100 <= rest && bilon.get(arr[index]) > 100) {
+            ans.put(arr[index], ans.get(arr[index]) + 100);
+            bilon.put(arr[index], (bilon.get(arr[index]) - 100));
+            countRest(index, arr, rest - arr[index] * 100, ans, bilon);
+        } else if ((arr[index] <= rest) && bilon.get(arr[index]) > 0) {
             ans.put(arr[index], ans.get(arr[index]) + 1);
             bilon.put(arr[index], (bilon.get(arr[index]) - 1));
             countRest(index, arr, rest - arr[index], ans, bilon);
         } else {
             countRest(index + 1, arr, rest, ans, bilon);
+
         }
-        return ans;
+        return true;
     }
 }
