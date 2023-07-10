@@ -16,10 +16,11 @@ public class RestCointCounter {
         bilon.put(2, 100);
         bilon.put(1, 10000);
 
-        counter(150, bilon);
-        counter(3, bilon);
-        counter(3, bilon);
-        counter(3, bilon);
+        counter(1.25, bilon);
+        counter(6.79, bilon);
+        counter(100, bilon);
+        counter(55, bilon);
+
 
     }
 
@@ -38,7 +39,8 @@ public class RestCointCounter {
         ans.put(2, 0);
         ans.put(1, 0);
 
-        countRest(0, arr, rest1, ans, bilon);
+        if (countRest(0, arr, rest1, ans, bilon)) {
+
             System.out.println("Dla reszty: " + rest);
             ans.forEach((key, value) -> {
                 switch (key) {
@@ -71,28 +73,29 @@ public class RestCointCounter {
                     }
                 }
             });
+        }
     }
 
     public static boolean countRest(int index, int[] arr, int rest,
                                     Map<Integer, Integer> ans, Map<Integer, Integer> bilon) {
 
-        if (rest == 0) return true;
-        if (index >= arr.length) {
-            System.out.println("-----Dla reszty poniżej za mało monet!----");
+        if (rest == 0 && index < arr.length) {
+            return true;
+        } else if (rest != 0 && index >= arr.length) {
+            System.out.println("-----Dla kolejnej reszty za mało monet!----");
             return false;
         }
 
         if (index == 8 && arr[index] * 100 <= rest && bilon.get(arr[index]) > 100) {
             ans.put(arr[index], ans.get(arr[index]) + 100);
             bilon.put(arr[index], (bilon.get(arr[index]) - 100));
-            countRest(index, arr, rest - arr[index] * 100, ans, bilon);
+            return countRest(index, arr, rest - arr[index] * 100, ans, bilon);
         } else if ((arr[index] <= rest) && bilon.get(arr[index]) > 0) {
             ans.put(arr[index], ans.get(arr[index]) + 1);
             bilon.put(arr[index], (bilon.get(arr[index]) - 1));
-            countRest(index, arr, rest - arr[index], ans, bilon);
+            return countRest(index, arr, rest - arr[index], ans, bilon);
         } else {
-            countRest(index + 1, arr, rest, ans, bilon);
+            return countRest(index + 1, arr, rest, ans, bilon);
         }
-        return true;
     }
 }
